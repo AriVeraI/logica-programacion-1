@@ -1,17 +1,71 @@
-alert("¡Bienvenido, a continuación tenemos un juego para ti!");
+// Función principal para solicitar y procesar los números
+function analizarNumeros() {
+    let num1, num2, num3;
 
-let num1 = Number(prompt("Ingresa el primer número que se te ocurra: "));
-let num2 = Number(prompt("Ingresa un segundo número: "));
-let num3 = Number(prompt("Ingresa por último un tercer número: "));
+    // Bucle para solicitar y validar que las 3 entradas sean números válidos
+    do {
+        num1 = parseFloat(prompt("Ingresa el primer número:"));
+        num2 = parseFloat(prompt("Ingresa el segundo número:"));
+        num3 = parseFloat(prompt("Ingresa el tercer número:"));
 
-// Validamos si alguno de los 3 no es un número
-if (isNaN(num1) || isNaN(num2) || isNaN(num3)) {
-    console.log("Por favor ingresa números válidos para continuar el juego.");
-    document.getElementById("resultado").innerText = "Error: Debes ingresar solo números.";
-} else {
-    console.log("Excelente, los números ingresados son válidos.");
-    
-    console.log(`Los números ingresados son: ${num1}, ${num2}, ${num3}`);
-    
-    // LÓGICA DE COMPARACIÓN
+        if (isNaN(num1) || isNaN(num2) || isNaN(num3)) {
+            alert("⚠️ Por favor, ingresa únicamente números válidos.");
+        }
+    } while (isNaN(num1) || isNaN(num2) || isNaN(num3));
+
+    const contenedorResultado = document.getElementById("resultado");
+    let mensajeDOM = "";
+
+    // 1. Verificar si todos los números son iguales
+    if (num1 === num2 && num2 === num3) {
+        const mensajeIguales = `Los tres números son iguales: ${num1}`;
+        console.log(mensajeIguales);
+        contenedorResultado.innerHTML = `<p><strong>${mensajeIguales}</strong></p>`;
+        return;
+    }
+
+    // 2. Guardar los números en un arreglo para ordenarlos
+    const numeros = [num1, num2, num3];
+
+    // Ordenar de mayor a menor (Copia del arreglo)
+    const mayorAMenor = [...numeros].sort((a, b) => b - a);
+
+    // Ordenar de menor a mayor (Copia del arreglo)
+    const menorAMayor = [...numeros].sort((a, b) => a - b);
+
+    // 3. Identificar Mayor, Centro y Menor
+    const mayor = mayorAMenor[0];
+    const centro = mayorAMenor[1];
+    const menor = mayorAMenor[2];
+
+    // 4. Salida por Consola (tal como lo pide la prueba)
+    console.log("--- RESULTADOS EN CONSOLA ---");
+    console.log(`Entradas: ${num1}, ${num2}, ${num3}`);
+    console.log("Ordenados de mayor a menor:", mayorAMenor.join(", "));
+    console.log("Ordenados de menor a mayor:", menorAMayor.join(", "));
+    console.log(`Mayor: ${mayor} | Centro: ${centro} | Menor: ${menor}`);
+
+    // 5. Salida por el DOM (Pantalla HTML)
+    mensajeDOM = `
+        <p><strong>Números ingresados:</strong> ${num1}, ${num2}, ${num3}</p>
+        <p><strong>De mayor a menor:</strong> ${mayorAMenor.join(", ")}</p>
+        <p><strong>De menor a mayor:</strong> ${menorAMayor.join(", ")}</p>
+        <hr>
+        <p>📌 <strong>Detalle:</strong></p>
+        <ul>
+            <li><strong>Número mayor:</strong> ${mayor}</li>
+            <li><strong>Número del centro:</strong> ${centro}</li>
+            <li><strong>Número menor:</strong> ${menor}</li>
+        </ul>
+    `;
+
+    // Si hay dos números iguales (pero no los 3), agregar nota aclaratoria
+    if (num1 === num2 || num1 === num3 || num2 === num3) {
+        mensajeDOM += `<p><em>Nota: Se detectaron números duplicados en la entrada.</em></p>`;
+    }
+
+    contenedorResultado.innerHTML = mensajeDOM;
 }
+
+// Ejecutar la función al cargar la página
+analizarNumeros();
